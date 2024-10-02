@@ -49,7 +49,7 @@ public class User
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<Like> likes = new HashSet<Like>();
 	
-	public long getId()
+	public Long getId()
 	{
 		return id;
 	}

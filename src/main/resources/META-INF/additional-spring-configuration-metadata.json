@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "project.upload.images",
+  "type": "java.lang.String",
+  "description": "File location for the uploaded images"
+}]}

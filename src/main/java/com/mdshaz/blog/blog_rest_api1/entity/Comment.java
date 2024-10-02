@@ -1,5 +1,7 @@
 package com.mdshaz.blog.blog_rest_api1.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,17 +18,21 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(name = "content")
     private String content;
+    
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "post_id")
     private Post post;
 
 	public Long getId()
@@ -47,6 +53,15 @@ public class Comment {
 	public void setContent(String content)
 	{
 		this.content = content;
+	}
+	public LocalDateTime getCreatedAt()
+	{
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt)
+	{
+		this.createdAt = createdAt;
 	}
 
 	public User getUser()

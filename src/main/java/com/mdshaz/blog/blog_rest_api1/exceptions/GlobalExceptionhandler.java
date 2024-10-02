@@ -1,5 +1,6 @@
 package com.mdshaz.blog.blog_rest_api1.exceptions;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +35,12 @@ public class GlobalExceptionhandler
 	}
 	@ExceptionHandler(EmailAlreadyExistException.class)
 	public ResponseEntity<ErrorDetails> handleEmailAlreadyExistException(Exception ex, WebRequest request){
+		ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(errorDetails);
+		
+	}
+	@ExceptionHandler(IOException.class)
+	public ResponseEntity<ErrorDetails> handleIOException(Exception ex, WebRequest request){
 		ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(errorDetails);
 		

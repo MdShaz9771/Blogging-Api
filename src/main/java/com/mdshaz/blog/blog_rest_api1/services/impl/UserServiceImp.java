@@ -49,8 +49,13 @@ public class UserServiceImp implements UserService
 	@Override
 	public UserDto updateUser(UserDto userDto, Long id)
 	{
-		User user = dtoToUser(userDto);
-		user.setId(id);
+//		User user = dtoToUser(userDto);
+		User user = userRepo.findById(id)
+				.orElseThrow(()->new UserNotFoundException("No user found"));
+		user.setName(userDto.getName());
+		user.setEmail(userDto.getEmail());
+		user.setPassword(userDto.getPassword());
+		user.setAbout(userDto.getAbout());
 		User savedUser= userRepo.save(user);
 
 		return userToDto(savedUser);
