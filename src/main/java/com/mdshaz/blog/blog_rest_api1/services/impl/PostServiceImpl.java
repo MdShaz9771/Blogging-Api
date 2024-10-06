@@ -104,6 +104,7 @@ public class PostServiceImpl implements PostService
 	@Override
 	public PostDto getPostById(Long postId)
 	{
+		
 		Post post = postRepo.findById(postId)
 				.orElseThrow(() -> new ResourceNotFoundException("No post found with this ID"));
 		PostDto postDto=postToPostDto(post);

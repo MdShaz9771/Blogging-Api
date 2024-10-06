@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,78 +17,54 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mdshaz.blog.blog_rest_api1.payloads.UserDto;
 import com.mdshaz.blog.blog_rest_api1.services.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-/*
- * Create User: POST /api/users
-Get All Users: GET /api/users
-Update User: PUT /api/users/{id}
-Delete User: DELETE /api/users/{id}
-This structure adheres to RESTful principles 
- */
-
 @RestController
-@RequestMapping("api/users")
-public class UserController
-{
-	private UserService userService;
+@RequestMapping("/api/users")
+@Tag(name = "Users Api", description = "Endpoints for user management")
+public class UserController {
 
-	public UserController(UserService userService)
-	{
-		this.userService = userService;
-	}
+    private final UserService userService;
 
-	@PostMapping("/")
-	ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto user)
-	{
-		UserDto savedUser = userService.createUser(user);
-//		savedUser.setName(user.getName()); This is also a method
-		return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-	}
-	@GetMapping("/")
-	ResponseEntity<List<UserDto>> getAllUsers(){
-		List<UserDto> users= userService.getAllUser();
-		return ResponseEntity.ok().body(users);
-	}
-/* This is also a method to return with uri
-	@PostMapping("/create")
-	public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
-    // Create and save the new User entity
-    User savedUser = new User(userDto.getName(), userDto.getEmail(), userDto.getPassword(), userDto.getAbout());
-    UserDto savedUserDto = userService.saveUser(savedUser);
+    @PostMapping("/")
+    @Operation(summary = "Create a user", description = "Adds a new user")
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto user) {
+        UserDto savedUser = userService.createUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    }
 
-    // Build the location URI (e.g., /users/{id})
-    URI location = ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(savedUserDto.getId()) // Assuming your DTO has an ID field
-            .toUri();
+    @GetMapping("/")
+    @Operation(summary = "Get all users", description = "Retrieves a list of all users")
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> users = userService.getAllUser();
+        return ResponseEntity.ok().body(users);
+    }
 
-    // Return the response with the Location header and status 201 Created
-    return ResponseEntity.created(location).body(savedUserDto);
-}
+    @PutMapping("/{id}")
+    @Operation(summary = "Update a user", description = "Updates an existing user")
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserDto userDto) {
+        UserDto user = userService.updateUser(userDto, id);
+        return ResponseEntity.ok(user);
+    }
 
-*/
-	// update
-	@PutMapping("/{id}")
-	public ResponseEntity<UserDto> updateUser(@PathVariable Long id,@Valid @RequestBody UserDto userDto){
-		UserDto user= userService.updateUser(userDto, id);
-		
-		return ResponseEntity.ok(user);
-	}
-	@GetMapping("/{id}")
-	public ResponseEntity<UserDto> getUser(@PathVariable Long id){
-		UserDto user= userService.getUserById(id);
-		return ResponseEntity.ok(user);
-	}
-	// delete
-	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteUser(@PathVariable Long id){
-		userService.deleteUser(id);
-		return ResponseEntity.noContent().build();
-		
-	}
+    @GetMapping("/{id}")
+    @Operation(summary = "Get a user", description = "Retrieves a specific user by ID")
+    public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
+        UserDto user = userService.getUserById(id);
+        return ResponseEntity.ok(user);
+    }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete a user", description = "Deletes a specific user by ID")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
 }

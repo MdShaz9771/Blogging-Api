@@ -12,7 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-@Entity // this is completed
+@Entity 
 @Table(name = "categories")
 public class Category
 {

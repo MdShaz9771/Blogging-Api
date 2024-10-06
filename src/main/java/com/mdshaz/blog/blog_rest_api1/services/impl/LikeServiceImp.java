@@ -67,4 +67,11 @@ public class LikeServiceImp implements LikeService
 		return totalLikes;
 	}
 
+	@Override
+	public boolean likeExist(User user, Post post)
+	{
+		
+		return likeRepo.existsByUserAndPost(user, post);
+	}
+
 }

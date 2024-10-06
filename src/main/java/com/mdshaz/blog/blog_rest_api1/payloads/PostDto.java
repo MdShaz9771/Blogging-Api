@@ -3,157 +3,116 @@ package com.mdshaz.blog.blog_rest_api1.payloads;
 import java.time.LocalDateTime;
 import java.util.Map;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class PostDto
-{
-	
+@Schema(description = "Data transfer object representing a blog post")
+public class PostDto {
 
-	private long id;
-	
-	@NotBlank(message = "Title must not be blank")
-	@Size(max = 100,message = "Title must be less than 100 characters")
-	private String title;
-	
-	@NotBlank(message = "Content must not be blank")
-	@Size(max = 3000,message = "Title must be less than 3000 characters")
-	private String content;
-	
-	private String imageUrl;
-	
-	private LocalDateTime createdAt;
-	
-	private Map<String, String> userDetails;
-	
-	private CategoryDto categorDto;
-	
-	private Long totalLikes;
-	boolean isLikedByCurrentUser;
-	
-//	private List<String> comments;
-	
-//	private Long likes;
+    @Schema(description = "Unique ID of the post", example = "1")
+    private long id;
 
-	public long getId()
-	{
-		return id;
-	}
+    @NotBlank(message = "Title must not be blank")
+    @Size(max = 100, message = "Title must be less than 100 characters")
+    @Schema(description = "Title of the blog post", example = "Understanding Spring Boot")
+    private String title;
 
-	public void setId(long id)
-	{
-		this.id = id;
-	}
+    @NotBlank(message = "Content must not be blank")
+    @Size(max = 3000, message = "Content must be less than 3000 characters")
+    @Schema(description = "Content of the blog post", example = "This post explains how to use Spring Boot...")
+    private String content;
 
-	public String getTitle()
-	{
-		return title;
-	}
+    @Schema(description = "URL of the post image", example = "http://example.com/image.jpg")
+    private String imageUrl;
 
-	public void setTitle(String title)
-	{
-		this.title = title;
-	}
+    @Schema(description = "Timestamp of when the post was created", example = "2023-10-04T12:45:30")
+    private LocalDateTime createdAt;
 
-	public String getContent()
-	{
-		return content;
-	}
+    @Schema(description = "Details of the user who created the post", example = "{\"username\": \"john_doe\", \"email\": \"john@example.com\"}")
+    private Map<String, String> userDetails;
 
-	public void setContent(String content)
-	{
-		this.content = content;
-	}
+    @Schema(description = "Category of the post")
+    private CategoryDto categoryDto;
 
-	public String getImageUrl()
-	{
-		return imageUrl;
-	}
+    @Schema(description = "Total number of likes for the post", example = "10")
+    private Long totalLikes;
 
-	public void setImageUrl(String imageUrl)
-	{
-		this.imageUrl = imageUrl;
-	}
+    @Schema(description = "Indicates whether the post is liked by the current user", example = "true")
+    private boolean isLikedByCurrentUser;
 
-	public LocalDateTime getCreatedAt()
-	{
-		return createdAt;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public void setCreatedAt(LocalDateTime createdAt)
-	{
-		this.createdAt = createdAt;
-	}
-	
-	
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public Map<String, String> getUserDetails()
-	{
-		return userDetails;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setUserDetails(Map<String, String> userDetails)
-	{
-		this.userDetails = userDetails;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public CategoryDto getCategoryDto()
-	{
-		return categorDto;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public void setCategoryDto(CategoryDto categorDto)
-	{
-		this.categorDto = categorDto;
-	}
-	
-	
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-//	public List<String> getComments()
-//	{
-//		return comments;
-//	}
-//
-//	public void setComments(List<String> comments)
-//	{
-//		this.comments = comments;
-//	}
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
-//	public Long getLikes()
-//	{
-//		return likes;
-//	}
-//
-//	public void setLikes(Long likes)
-//	{
-//		this.likes = likes;
-//	}
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
-	public Long getTotalLikes()
-	{
-		return totalLikes;
-	}
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
-	public void setTotalLikes(Long totalLikes)
-	{
-		this.totalLikes = totalLikes;
-	}
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 
-	public boolean isLikedByCurrentUser()
-	{
-		return isLikedByCurrentUser;
-	}
+    public Map<String, String> getUserDetails() {
+        return userDetails;
+    }
 
-	public void setLikedByCurrentUser(boolean isLikedByCurrentUser)
-	{
-		this.isLikedByCurrentUser = isLikedByCurrentUser;
-	}
+    public void setUserDetails(Map<String, String> userDetails) {
+        this.userDetails = userDetails;
+    }
 
-	public PostDto()
-	{
-	}
-	
-	
+    public CategoryDto getCategoryDto() {
+        return categoryDto;
+    }
 
+    public void setCategoryDto(CategoryDto categoryDto) {
+        this.categoryDto = categoryDto;
+    }
 
+    public Long getTotalLikes() {
+        return totalLikes;
+    }
+
+    public void setTotalLikes(Long totalLikes) {
+        this.totalLikes = totalLikes;
+    }
+
+    public boolean isLikedByCurrentUser() {
+        return isLikedByCurrentUser;
+    }
+
+    public void setLikedByCurrentUser(boolean isLikedByCurrentUser) {
+        this.isLikedByCurrentUser = isLikedByCurrentUser;
+    }
+
+    public PostDto() {
+    }
 }

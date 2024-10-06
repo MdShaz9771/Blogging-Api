@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.mdshaz.blog.blog_rest_api1.entity.Role;
@@ -22,12 +23,15 @@ public class UserServiceImp implements UserService
 	private UserRepo userRepo;
 	private RoleRepo roleRepo;
 	private ModelMapper modelMapper;
+	private PasswordEncoder passwordEncoder;
 
-	public UserServiceImp(UserRepo userRepo,RoleRepo roleRepo,ModelMapper modelMapper)
+	public UserServiceImp(UserRepo userRepo,RoleRepo roleRepo,
+			ModelMapper modelMapper,PasswordEncoder passwordEncoder)
 	{
 		this.userRepo = userRepo;
 		this.roleRepo=roleRepo;
 		this.modelMapper=modelMapper;
+		this.passwordEncoder=passwordEncoder;
 	}
 
 	@Override
@@ -39,7 +43,7 @@ public class UserServiceImp implements UserService
 		if(userRepo.findByEmail(user.getEmail()).isPresent())
 			throw new EmailAlreadyExistException("This Email already exist. Try different Email");
 		
-		
+		user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 		user.setRole(Set.of(role));
 		userRepo.save(user);
 
@@ -54,7 +58,7 @@ public class UserServiceImp implements UserService
 				.orElseThrow(()->new UserNotFoundException("No user found"));
 		user.setName(userDto.getName());
 		user.setEmail(userDto.getEmail());
-		user.setPassword(userDto.getPassword());
+		user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 		user.setAbout(userDto.getAbout());
 		User savedUser= userRepo.save(user);
 

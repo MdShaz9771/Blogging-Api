@@ -10,26 +10,30 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mdshaz.blog.blog_rest_api1.services.LikeService;
 
-@RestController()
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@RestController
 @RequestMapping("/api/users")
-public class LikeController
-{
-	private LikeService likeService;
-	
-	public LikeController(LikeService likeService)
-	{
-		this.likeService = likeService;
-	}
+@Tag(name = "Likes Api", description = "Endpoints for like management")
+public class LikeController {
+    private LikeService likeService;
 
-	@PostMapping("/{userId}/posts/{postId}/like")
-	ResponseEntity<String> addLike(@PathVariable Long postId,@PathVariable Long userId){
-		String like = likeService.addLike(userId, postId);
-		return ResponseEntity.status(HttpStatus.CREATED).body(like);
-	}
-	@DeleteMapping("/{userId}/posts/{postId}/like")
-	ResponseEntity<String> removeLike(@PathVariable Long postId,@PathVariable Long userId){
-		String like = likeService.removeLike(userId, postId);
-		return ResponseEntity.ok(like);
-	}
+    public LikeController(LikeService likeService) {
+        this.likeService = likeService;
+    }
 
+    @PostMapping("/{userId}/posts/{postId}/like")
+    @Operation(summary = "Add a like", description = "Adds a like to a specific post")
+    ResponseEntity<String> addLike(@PathVariable Long postId, @PathVariable Long userId) {
+        String like = likeService.addLike(userId, postId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(like);
+    }
+
+    @DeleteMapping("/{userId}/posts/{postId}/like")
+    @Operation(summary = "Remove a like", description = "Removes a like from a specific post")
+    ResponseEntity<String> removeLike(@PathVariable Long postId, @PathVariable Long userId) {
+        String like = likeService.removeLike(userId, postId);
+        return ResponseEntity.ok(like);
+    }
 }
