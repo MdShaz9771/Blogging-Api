@@ -27,7 +27,8 @@ public class SwaggerConfig
                 .contact(new Contact()
                     .name("Md Shaz")
                     .email("mdshaz9931@gmail.com")
-                    .url("https://github.com/MdShaz9771")
+                    .url("www.linkedin.com/in/md-shaz-a772a9214")
+                    
                 )
             )
             .servers(Arrays.asList(
