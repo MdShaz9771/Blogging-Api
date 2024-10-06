@@ -1,6 +1,8 @@
 # 🌟 Blogging API with Spring Boot 🌟
 
-This is a comprehensive **Blogging API** built using **Spring Boot**, equipped with advanced security, role-based authentication and authorization, pagination, sorting, and a host of CRUD operations. The project is well-documented with **Swagger** for easy exploration and testing.
+- This is a comprehensive **Blogging API** built using **Spring Boot**, equipped with advanced security, role-based authentication and authorization, pagination, sorting, and a host of CRUD operations. The project is well-documented with **Swagger** for easy exploration and testing.
+- 
+
 
 ## 🛠 Features
 
@@ -26,109 +28,6 @@ This is a comprehensive **Blogging API** built using **Spring Boot**, equipped w
   
 ### Data Base ER Diagram
 ![ER diagram](https://github.com/user-attachments/assets/38180534-800d-42b8-a0a7-80608cf4b7df)
-
-## 🗂 Project Structure
-
-```plaintext
-+---src
-|   +---main
-|   |   +---java
-|   |   |   \---com
-|   |   |       \---mdshaz
-|   |   |           \---blog
-|   |   |               \---blog_rest_api1
-|   |   |                   |   BlogRestApi1Application.java
-|   |   |                   |
-|   |   |                   +---config
-|   |   |                   |       AppConstants.java
-|   |   |                   |       DemoController.java
-|   |   |                   |       ModelMapperConfig.java
-|   |   |                   |       SecurityConfig.java
-|   |   |                   |       SwaggerConfig.java
-|   |   |                   |
-|   |   |                   +---controllers
-|   |   |                   |       AuthController.java
-|   |   |                   |       CategoryController.java
-|   |   |                   |       CommentController.java
-|   |   |                   |       LikeController.java
-|   |   |                   |       PostController.java
-|   |   |                   |       RoleController.java
-|   |   |                   |       UserController.java
-|   |   |                   |
-|   |   |                   +---entity
-|   |   |                   |       Category.java
-|   |   |                   |       Comment.java
-|   |   |                   |       Like.java
-|   |   |                   |       Post.java
-|   |   |                   |       Role.java
-|   |   |                   |       User.java
-|   |   |                   |
-|   |   |                   +---exceptions
-|   |   |                   |       AlreadyExistException.java
-|   |   |                   |       EmailAlreadyExistException.java
-|   |   |                   |       ErrorDetails.java
-|   |   |                   |       GlobalExceptionHandler.java
-|   |   |                   |       ResourceNotFoundException.java
-|   |   |                   |       UserNotFoundException.java
-|   |   |                   |
-|   |   |                   +---payloads
-|   |   |                   |       CategoryDto.java
-|   |   |                   |       CommentDto.java
-|   |   |                   |       JwtResponseDto.java
-|   |   |                   |       LoginRequestDto.java
-|   |   |                   |       PostDto.java
-|   |   |                   |       PostResponse.java
-|   |   |                   |       RoleDto.java
-|   |   |                   |       UserDto.java
-|   |   |                   |
-|   |   |                   +---repositories
-|   |   |                   |       CategoryRepo.java
-|   |   |                   |       CommentRepo.java
-|   |   |                   |       LikeRepo.java
-|   |   |                   |       PostRepo.java
-|   |   |                   |       RoleRepo.java
-|   |   |                   |       UserRepo.java
-|   |   |                   |
-|   |   |                   +---security
-|   |   |                   |       CustomUserDetails.java
-|   |   |                   |       CustomUserDetailsService.java
-|   |   |                   |       JwtFilter.java
-|   |   |                   |       JwtService.java
-|   |   |                   |       UserVerificationService.java
-|   |   |                   |
-|   |   |                   +---services
-|   |   |                   |   |   CategoryService.java
-|   |   |                   |   |   CommentService.java
-|   |   |                   |   |   LikeService.java
-|   |   |                   |   |   PostService.java
-|   |   |                   |   |   RoleService.java
-|   |   |                   |   |   UserService.java
-|   |   |                   |   |
-|   |   |                   |   \---impl
-|   |   |                   |           CategoryServiceImpl.java
-|   |   |                   |           CommentServiceImpl.java
-|   |   |                   |           LikeServiceImpl.java
-|   |   |                   |           PostServiceImpl.java
-|   |   |                   |           RoleServiceImpl.java
-|   |   |                   |           UserServiceImpl.java
-|   |   |                   |
-|   |   |                   \---util
-|   |   \---resources
-|   |       |   application-dev.properties
-|   |       |   application-prod.properties
-|   |       |   application.properties
-|   |       |
-|   |       \---META-INF
-|   |               additional-spring-configuration-metadata.json
-|   |
-|   \---test
-|       \---java
-|           \---com
-|               \---mdshaz
-|                   \---blog
-|                       \---blog_rest_api1
-|                               BlogRestApi1ApplicationTests.java
-```
 
 # 🎯 How to Run the Project
 
@@ -178,4 +77,21 @@ Example API usage:
 
 Create, read, update, delete blog posts
 User authentication and authorization via JWT
+
+## 🚀 Future Improvements
+
+- Implement social login (Google, GitHub OAuth2)
+- Send email notifications for new posts or comments
+- Enhance search functionality to support keyword search across posts and comments
+
+## 👨‍💻 Contributions
+
+Feel free to fork this project, raise issues, or contribute via pull requests. I'd love to collaborate with you!
+
+## 📞 Contact
+
+If you have any suggestions or feedback, reach out to me on LinkedIn or via email:
+
+- **Email**: [mdshaz9931@gmail.com](mailto:mdshaz9931@gmail.com)
+- **LinkedIn**: [Your LinkedIn Profile](www.linkedin.com/in/md-shaz-a772a9214)
 
