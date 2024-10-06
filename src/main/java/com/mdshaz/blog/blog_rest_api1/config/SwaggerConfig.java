@@ -31,7 +31,9 @@ public class SwaggerConfig
                 )
             )
             .servers(Arrays.asList(
-                    new Server().url("http://localhost:8080").description("Local Development Server"))
+            		new Server().url("https://shazblogapp-57a42fb824ff.herokuapp.com").description("Production Server"),
+                    new Server().url("http://localhost:8080").description("Local Development Server")
+                    )
             )
             .tags(Arrays.asList(
                     new Tag().name("Authentication Api").description("Authentication related endpoints"),
