@@ -39,6 +39,7 @@ public class SecurityConfig
 				.csrf(csrf->csrf.disable())
 				.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(request->request
+						.requestMatchers("/").permitAll()
 						.requestMatchers("/api/auth/**").permitAll()
 						.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll() 
 						.requestMatchers("/api/admin/**").hasRole("ADMIN")
@@ -46,7 +47,7 @@ public class SecurityConfig
 						.requestMatchers(HttpMethod.PUT,"/api/categories/**").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.DELETE,"/api/categories/**").hasRole("ADMIN")
 						.anyRequest().authenticated())
-				.httpBasic(Customizer.withDefaults())
+//				.httpBasic(Customizer.withDefaults())
 				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 				.build();
 		
