@@ -93,5 +93,5 @@ Feel free to fork this project, raise issues, or contribute via pull requests. I
 If you have any suggestions or feedback, reach out to me on LinkedIn or via email:
 
 - **Email**: [mdshaz9931@gmail.com](mailto:mdshaz9931@gmail.com)
-- **LinkedIn**: [Your LinkedIn Profile](www.linkedin.com/in/md-shaz-a772a9214)
+- **LinkedIn**: [My LinkedIn Profile](https://www.linkedin.com/in/md-shaz-a772a9214)
 
