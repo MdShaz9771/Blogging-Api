@@ -18,10 +18,14 @@ This is a comprehensive **Blogging API** built using **Spring Boot**, equipped w
 - **User Management**: Admins can delete users and manage their roles.
 - **Role Management**: Admins can add or delete roles to maintain control over user access.
 
+
 ## 🚀 Technologies Used
 - **Backend**: Spring Boot, Spring Security (JWT), Spring Data JPA
 - **Database**: MySQL
 - **Documentation**: Swagger
+  
+### Data Base ER Diagram
+![ER diagram](https://github.com/user-attachments/assets/38180534-800d-42b8-a0a7-80608cf4b7df)
 
 ## 🗂 Project Structure
 
