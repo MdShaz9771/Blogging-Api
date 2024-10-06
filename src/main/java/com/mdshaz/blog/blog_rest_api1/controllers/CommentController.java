@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mdshaz.blog.blog_rest_api1.payloads.CommentDto;
+import com.mdshaz.blog.blog_rest_api1.payloads.CommentRequestDto;
 import com.mdshaz.blog.blog_rest_api1.services.CommentService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,7 +31,7 @@ public class CommentController {
 
     @PostMapping("{userId}/posts/{postId}/comments")
     @Operation(summary = "Add a comment", description = "Adds a new comment to a post")
-    ResponseEntity<CommentDto> addComment(@RequestBody CommentDto commentdto, @PathVariable Long userId, @PathVariable Long postId) {
+    ResponseEntity<CommentDto> addComment(@RequestBody CommentRequestDto commentdto, @PathVariable Long userId, @PathVariable Long postId) {
         CommentDto savedComment = commentService.addComment(commentdto, userId, postId);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedComment);
     }

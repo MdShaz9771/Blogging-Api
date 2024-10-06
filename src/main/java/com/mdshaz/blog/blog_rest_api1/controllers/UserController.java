@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mdshaz.blog.blog_rest_api1.payloads.UserDto;
+import com.mdshaz.blog.blog_rest_api1.payloads.UserRequestDto;
 import com.mdshaz.blog.blog_rest_api1.services.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,13 +35,14 @@ public class UserController {
 
     @PostMapping("/")
     @Operation(summary = "Create a user", description = "Adds a new user")
-    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto user) {
-        UserDto savedUser = userService.createUser(user);
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserRequestDto userReqDto) {
+        UserDto savedUser = userService.createUser(userReqDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/")
-    @Operation(summary = "Get all users", description = "Retrieves a list of all users")
+    @Operation(summary = "Get all users(For Admins only)", description = "Retrieves a list of all users")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<UserDto> users = userService.getAllUser();
         return ResponseEntity.ok().body(users);
@@ -48,8 +50,8 @@ public class UserController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update a user", description = "Updates an existing user")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserDto userDto) {
-        UserDto user = userService.updateUser(userDto, id);
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDto userReqDto) {
+        UserDto user = userService.updateUser(userReqDto, id);
         return ResponseEntity.ok(user);
     }
 
@@ -62,7 +64,7 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a user", description = "Deletes a specific user by ID")
+    @Operation(summary = "Delete a user (For Admins only)", description = "Deletes a specific user by ID")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();

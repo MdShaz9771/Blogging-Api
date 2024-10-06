@@ -29,6 +29,7 @@ import com.mdshaz.blog.blog_rest_api1.exceptions.ResourceNotFoundException;
 import com.mdshaz.blog.blog_rest_api1.exceptions.UserNotFoundException;
 import com.mdshaz.blog.blog_rest_api1.payloads.CategoryDto;
 import com.mdshaz.blog.blog_rest_api1.payloads.PostDto;
+import com.mdshaz.blog.blog_rest_api1.payloads.PostRequestDto;
 import com.mdshaz.blog.blog_rest_api1.payloads.PostResponse;
 import com.mdshaz.blog.blog_rest_api1.repositories.CategoryRepo;
 import com.mdshaz.blog.blog_rest_api1.repositories.LikeRepo;
@@ -67,8 +68,9 @@ public class PostServiceImpl implements PostService
 	
 
 	@Override
-	public PostDto addPost(PostDto postDto, Long userId,Long categoryId)
+	public PostDto addPost(PostRequestDto postReqDto, Long userId,Long categoryId)
 	{
+		PostDto postDto = modelMapper.map(postReqDto, PostDto.class);
 		Category category= categoryRepo.findById(categoryId)
 				.orElseThrow(()-> new ResourceNotFoundException("Select a valid category"));
 		User user = userRepo.findById(userId)
@@ -84,8 +86,9 @@ public class PostServiceImpl implements PostService
 		return savedPostDto;
 	}
 	 @Override
-	    public PostDto updatePost(PostDto postDto,Long postId) 
+	    public PostDto updatePost(PostRequestDto postReqDto,Long postId) 
 	 {
+		 	PostDto postDto = modelMapper.map(postReqDto, PostDto.class);
 	        Post post = postRepo.findById(postId)
 	                .orElseThrow(() -> new ResourceNotFoundException("No post found with this ID"));
 
@@ -98,6 +101,20 @@ public class PostServiceImpl implements PostService
 	        updatedPostDto.setTotalLikes(likeRepo.countByPost(updatedPost));
 	        return updatedPostDto;
 	    }
+	 @Override
+		public PostDto updatePost(PostDto postDto, Long postId)
+		{
+		 	Post post = postRepo.findById(postId)
+	                .orElseThrow(() -> new ResourceNotFoundException("No post found with this ID"));
+
+	        post.setTitle(postDto.getTitle());
+	        post.setContent(postDto.getContent());
+
+	        Post updatedPost = postRepo.save(post);
+	        PostDto updatedPostDto = postToPostDto(updatedPost);
+	        updatedPostDto.setTotalLikes(likeRepo.countByPost(updatedPost));
+	        return updatedPostDto;
+		}
 
 	
 
@@ -245,10 +262,6 @@ public class PostServiceImpl implements PostService
 			file.mkdir();
 			Files.copy(mFile.getInputStream(), Paths.get(path, fileName));
 		
-
-        // Delete the old image if it exists
-        
-		
 		return fileName;
 	}
 
@@ -261,19 +274,7 @@ public class PostServiceImpl implements PostService
         InputStream inputStream = Files.newInputStream(filePath);
         InputStreamResource resource = new InputStreamResource(inputStream);
 
-        // Return the image as an InputStream
-        
 		return resource;
 	}
-
-
-
-//	@Override
-//	public InputStream getResource(String path, String fileName) throws FileNotFoundException
-//	{
-//		String fullPath =path+File.separator+fileName;
-//		InputStream is= new FileInputStream(fullPath);
-//		return is;
-//	}
 	
 }

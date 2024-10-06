@@ -4,115 +4,129 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 @Schema(description = "Data transfer object representing a blog post")
-public class PostDto {
+public class PostDto
+{
 
-    @Schema(description = "Unique ID of the post", example = "1")
-    private long id;
+	@Schema(description = "Unique ID of the post", example = "1")
+	private long id;
 
-    @NotBlank(message = "Title must not be blank")
-    @Size(max = 100, message = "Title must be less than 100 characters")
-    @Schema(description = "Title of the blog post", example = "Understanding Spring Boot")
-    private String title;
+	@Schema(description = "Title of the blog post", example = "Understanding Spring Boot")
+	private String title;
 
-    @NotBlank(message = "Content must not be blank")
-    @Size(max = 3000, message = "Content must be less than 3000 characters")
-    @Schema(description = "Content of the blog post", example = "This post explains how to use Spring Boot...")
-    private String content;
+	@Schema(description = "Content of the blog post", example = "This post explains how to use Spring Boot...")
+	private String content;
 
-    @Schema(description = "URL of the post image", example = "http://example.com/image.jpg")
-    private String imageUrl;
+	@Schema(description = "URL of the post image", example = "http://example.com/image.jpg")
+	private String imageUrl;
 
-    @Schema(description = "Timestamp of when the post was created", example = "2023-10-04T12:45:30")
-    private LocalDateTime createdAt;
+	@Schema(description = "Timestamp of when the post was created", example = "2023-10-04T12:45:30")
+	private LocalDateTime createdAt;
 
-    @Schema(description = "Details of the user who created the post", example = "{\"username\": \"john_doe\", \"email\": \"john@example.com\"}")
-    private Map<String, String> userDetails;
+	@Schema(description = "Details of the user who created the post", example = "{\"username\": \"john_doe\", \"email\": \"john@example.com\"}")
+	private Map<String, String> userDetails;
 
-    @Schema(description = "Category of the post")
-    private CategoryDto categoryDto;
+	@Schema(description = "Category of the post")
+	private CategoryDto categoryDto;
 
-    @Schema(description = "Total number of likes for the post", example = "10")
-    private Long totalLikes;
+	@Schema(description = "Total number of likes for the post", example = "10")
+	private Long totalLikes;
 
-    @Schema(description = "Indicates whether the post is liked by the current user", example = "true")
-    private boolean isLikedByCurrentUser;
+	@Schema(description = "Indicates whether the post is liked by the current user", example = "true")
+	private boolean isLikedByCurrentUser;
 
-    public long getId() {
-        return id;
-    }
+	public long getId()
+	{
+		return id;
+	}
 
-    public void setId(long id) {
-        this.id = id;
-    }
+	public void setId(long id)
+	{
+		this.id = id;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public String getTitle()
+	{
+		return title;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public void setTitle(String title)
+	{
+		this.title = title;
+	}
 
-    public String getContent() {
-        return content;
-    }
+	public String getContent()
+	{
+		return content;
+	}
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+	public void setContent(String content)
+	{
+		this.content = content;
+	}
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+	public String getImageUrl()
+	{
+		return imageUrl;
+	}
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+	public void setImageUrl(String imageUrl)
+	{
+		this.imageUrl = imageUrl;
+	}
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+	public LocalDateTime getCreatedAt()
+	{
+		return createdAt;
+	}
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+	public void setCreatedAt(LocalDateTime createdAt)
+	{
+		this.createdAt = createdAt;
+	}
 
-    public Map<String, String> getUserDetails() {
-        return userDetails;
-    }
+	public Map<String, String> getUserDetails()
+	{
+		return userDetails;
+	}
 
-    public void setUserDetails(Map<String, String> userDetails) {
-        this.userDetails = userDetails;
-    }
+	public void setUserDetails(Map<String, String> userDetails)
+	{
+		this.userDetails = userDetails;
+	}
 
-    public CategoryDto getCategoryDto() {
-        return categoryDto;
-    }
+	public CategoryDto getCategoryDto()
+	{
+		return categoryDto;
+	}
 
-    public void setCategoryDto(CategoryDto categoryDto) {
-        this.categoryDto = categoryDto;
-    }
+	public void setCategoryDto(CategoryDto categoryDto)
+	{
+		this.categoryDto = categoryDto;
+	}
 
-    public Long getTotalLikes() {
-        return totalLikes;
-    }
+	public Long getTotalLikes()
+	{
+		return totalLikes;
+	}
 
-    public void setTotalLikes(Long totalLikes) {
-        this.totalLikes = totalLikes;
-    }
+	public void setTotalLikes(Long totalLikes)
+	{
+		this.totalLikes = totalLikes;
+	}
 
-    public boolean isLikedByCurrentUser() {
-        return isLikedByCurrentUser;
-    }
+	public boolean isLikedByCurrentUser()
+	{
+		return isLikedByCurrentUser;
+	}
 
-    public void setLikedByCurrentUser(boolean isLikedByCurrentUser) {
-        this.isLikedByCurrentUser = isLikedByCurrentUser;
-    }
+	public void setLikedByCurrentUser(boolean isLikedByCurrentUser)
+	{
+		this.isLikedByCurrentUser = isLikedByCurrentUser;
+	}
 
-    public PostDto() {
-    }
+	public PostDto()
+	{
+	}
 }

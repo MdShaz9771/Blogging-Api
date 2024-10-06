@@ -21,11 +21,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mdshaz.blog.blog_rest_api1.config.AppConstants;
 import com.mdshaz.blog.blog_rest_api1.payloads.PostDto;
+import com.mdshaz.blog.blog_rest_api1.payloads.PostRequestDto;
 import com.mdshaz.blog.blog_rest_api1.payloads.PostResponse;
 import com.mdshaz.blog.blog_rest_api1.services.PostService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -46,19 +46,19 @@ public class PostController {
     @PostMapping("/{userId}/categories/{categoryId}/posts")
     @Operation(summary = "Create a post", description = "Adds a new post for a specific user and category")
     public ResponseEntity<PostDto> createPost(
-            @Valid @RequestBody PostDto postDto,
+            @Valid @RequestBody PostRequestDto postReqDto,
             @PathVariable Long userId,
             @PathVariable Long categoryId) {
-        PostDto savedPost = postService.addPost(postDto, userId, categoryId);
+        PostDto savedPost = postService.addPost(postReqDto, userId, categoryId);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedPost);
     }
 
     @PutMapping("/posts/{postId}")
     @Operation(summary = "Update a post", description = "Updates an existing post")
     public ResponseEntity<PostDto> updatePost(
-            @Valid @RequestBody PostDto postDto,
+            @Valid @RequestBody PostRequestDto postReqDto,
             @PathVariable Long postId) {
-        PostDto savedPost = postService.updatePost(postDto, postId);
+        PostDto savedPost = postService.updatePost(postReqDto, postId);
         return ResponseEntity.status(HttpStatus.OK).body(savedPost);
     }
 

@@ -13,6 +13,7 @@ import com.mdshaz.blog.blog_rest_api1.entity.User;
 import com.mdshaz.blog.blog_rest_api1.exceptions.EmailAlreadyExistException;
 import com.mdshaz.blog.blog_rest_api1.exceptions.UserNotFoundException;
 import com.mdshaz.blog.blog_rest_api1.payloads.UserDto;
+import com.mdshaz.blog.blog_rest_api1.payloads.UserRequestDto;
 import com.mdshaz.blog.blog_rest_api1.repositories.RoleRepo;
 import com.mdshaz.blog.blog_rest_api1.repositories.UserRepo;
 import com.mdshaz.blog.blog_rest_api1.services.UserService;
@@ -35,8 +36,9 @@ public class UserServiceImp implements UserService
 	}
 
 	@Override
-	public UserDto createUser(UserDto userDto)
+	public UserDto createUser(UserRequestDto userReqDto)
 	{
+		UserDto userDto = modelMapper.map(userReqDto, UserDto.class);
 		User user = dtoToUser(userDto);
 		Role role = roleRepo.findByName("ROLE_USER")
 				.orElseThrow(()->new RuntimeException("Role not found"));	
@@ -51,15 +53,14 @@ public class UserServiceImp implements UserService
 	}
 
 	@Override
-	public UserDto updateUser(UserDto userDto, Long id)
+	public UserDto updateUser(UserRequestDto userReqDto, Long id)
 	{
-//		User user = dtoToUser(userDto);
 		User user = userRepo.findById(id)
 				.orElseThrow(()->new UserNotFoundException("No user found"));
-		user.setName(userDto.getName());
-		user.setEmail(userDto.getEmail());
-		user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-		user.setAbout(userDto.getAbout());
+		user.setName(userReqDto.getName());
+		user.setEmail(userReqDto.getEmail());
+		user.setPassword(passwordEncoder.encode(userReqDto.getPassword()));
+		user.setAbout(userReqDto.getAbout());
 		User savedUser= userRepo.save(user);
 
 		return userToDto(savedUser);

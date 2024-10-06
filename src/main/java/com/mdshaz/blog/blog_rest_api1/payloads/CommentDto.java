@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 @Schema(description = "Data transfer object representing a comment on a blog post")
 public class CommentDto {
@@ -13,9 +11,7 @@ public class CommentDto {
     @Schema(description = "Unique ID of the comment", example = "101")
     private Long id;
 
-    @NotBlank(message = "Content must not be blank")
-    @Size(max = 3000, message = "Content must be less than 3000 characters")
-    @Schema(description = "Content of the comment", example = "This is a great post!", required = true)
+    @Schema(description = "Content of the comment", example = "This is a great post!")
     private String content;
 
     @Schema(description = "Timestamp of when the comment was created", example = "2023-10-04T12:45:30")
@@ -24,7 +20,7 @@ public class CommentDto {
     @Schema(description = "ID of the post the comment belongs to", example = "201")
     private Long postId;
 
-    @Schema(description = "Details of the user who made the comment", example = "{\"username\": \"john_doe\", \"email\": \"john@example.com\"}")
+    @Schema(description = "Details of the user who made the comment")
     private Map<String, String> userDetails;
 
     public Long getId() {

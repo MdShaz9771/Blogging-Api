@@ -7,12 +7,14 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mdshaz.blog.blog_rest_api1.payloads.PostDto;
+import com.mdshaz.blog.blog_rest_api1.payloads.PostRequestDto;
 import com.mdshaz.blog.blog_rest_api1.payloads.PostResponse;
 
 public interface PostService
 {
-	 PostDto addPost(PostDto postDto, Long userId, Long categoryId);
-	 PostDto updatePost(PostDto postDto,Long postId);//
+	 PostDto addPost(PostRequestDto postReqDto, Long userId, Long categoryId);
+	 PostDto updatePost(PostRequestDto postReqDto,Long postId);
+	 PostDto updatePost(PostDto postDto,Long postId);
 	 PostDto getPostById(Long postId);
 	 void deletePostById(Long postId);
 	 PostResponse getAllPost(Integer pageNumber,Integer pageSize,String sortBy);

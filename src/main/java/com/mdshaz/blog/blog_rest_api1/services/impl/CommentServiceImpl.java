@@ -15,6 +15,7 @@ import com.mdshaz.blog.blog_rest_api1.entity.User;
 import com.mdshaz.blog.blog_rest_api1.exceptions.ResourceNotFoundException;
 import com.mdshaz.blog.blog_rest_api1.exceptions.UserNotFoundException;
 import com.mdshaz.blog.blog_rest_api1.payloads.CommentDto;
+import com.mdshaz.blog.blog_rest_api1.payloads.CommentRequestDto;
 import com.mdshaz.blog.blog_rest_api1.repositories.CommentRepo;
 import com.mdshaz.blog.blog_rest_api1.repositories.PostRepo;
 import com.mdshaz.blog.blog_rest_api1.repositories.UserRepo;
@@ -38,8 +39,9 @@ public class CommentServiceImpl implements CommentService
 	}
 	
 	@Override
-	public CommentDto addComment(CommentDto commentDto, Long userId, Long postId)
+	public CommentDto addComment(CommentRequestDto commentReqDto, Long userId, Long postId)
 	{
+		CommentDto commentDto = modelMapper.map(commentReqDto, CommentDto.class);
 		User user = userRepo.findById(userId)
 				.orElseThrow(()->new UserNotFoundException("No user found"));
 		Post post = postRepo.findById(postId)
