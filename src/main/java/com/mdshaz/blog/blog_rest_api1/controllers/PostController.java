@@ -25,6 +25,7 @@ import com.mdshaz.blog.blog_rest_api1.payloads.PostResponse;
 import com.mdshaz.blog.blog_rest_api1.services.PostService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -114,7 +115,7 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
-    @PostMapping("/posts/{id}/image/upload")
+    @PostMapping(value = "/posts/{id}/image/upload",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Upload an image", description = "Uploads an image for a specific post")
     public ResponseEntity<PostDto> uploadImage(
             @RequestParam("image") MultipartFile file,
