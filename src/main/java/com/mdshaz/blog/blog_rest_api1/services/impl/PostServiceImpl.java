@@ -19,6 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -87,11 +89,13 @@ public class PostServiceImpl implements PostService
 		return savedPostDto;
 	}
 	 @Override
-	    public PostDto updatePost(PostRequestDto postReqDto,Long postId) 
+	    public PostDto updatePost(PostRequestDto postReqDto,Long postId, UserDetails userDetails) 
 	 {
 		 	PostDto postDto = modelMapper.map(postReqDto, PostDto.class);
 	        Post post = postRepo.findById(postId)
 	                .orElseThrow(() -> new ResourceNotFoundException("No post found with this ID"));
+	        if(!userDetails.getUsername().equalsIgnoreCase(post.getUser().getEmail()) && !hasRole("ROLE_ADMIN",userDetails) )
+	        	throw new AccessDeniedException("You are only allowed to edit own post.");
 
 	        post.setTitle(postDto.getTitle());
 	        post.setContent(postDto.getContent());
@@ -103,10 +107,12 @@ public class PostServiceImpl implements PostService
 	        return updatedPostDto;
 	    }
 	 @Override
-		public PostDto updatePost(PostDto postDto, Long postId)
+		public PostDto updatePost(PostDto postDto, Long postId, UserDetails userDetails)
 		{
 		 	Post post = postRepo.findById(postId)
 	                .orElseThrow(() -> new ResourceNotFoundException("No post found with this ID"));
+		 	if(!userDetails.getUsername().equalsIgnoreCase(post.getUser().getEmail()) && !hasRole("ROLE_ADMIN",userDetails) )
+	        	throw new AccessDeniedException("You are only allowed to edit own post.");
 
 	        post.setTitle(postDto.getTitle());
 	        post.setContent(postDto.getContent());
@@ -120,12 +126,18 @@ public class PostServiceImpl implements PostService
 	
 
 	@Override
-	public PostDto getPostById(Long postId)
+	public PostDto getPostById(Long postId,UserDetails userDetails)
 	{
 		
 		Post post = postRepo.findById(postId)
 				.orElseThrow(() -> new ResourceNotFoundException("No post found with this ID"));
 		PostDto postDto=postToPostDto(post);
+		if(userDetails !=null) {
+			User user = userRepo.findByEmail(userDetails.getUsername())
+					.orElseThrow(()->new UserNotFoundException("No user found"));
+			boolean liked = likeRepo.existsByUserAndPost(user, post);
+			postDto.setLikedByCurrentUser(liked);
+		}
 		postDto.setTotalLikes(likeRepo.countByPost(post));
 		return postDto;
 	}
@@ -133,10 +145,12 @@ public class PostServiceImpl implements PostService
 
 
 	@Override
-	public void deletePostById(Long postId)
+	public void deletePostById(Long postId, UserDetails userDetails)
 	{
 		Post post = postRepo.findById(postId)
 				.orElseThrow(() -> new ResourceNotFoundException("No post found with this ID"));
+		if(!userDetails.getUsername().equalsIgnoreCase(post.getUser().getEmail()) && !hasRole("ROLE_ADMIN",userDetails) )
+        	throw new AccessDeniedException("You are only allowed to delete your own post.");
 		postRepo.delete(post);
 		
 	}
@@ -144,7 +158,7 @@ public class PostServiceImpl implements PostService
 
 
 	@Override
-	public PostResponse getAllPost(Integer pageNumber,Integer pageSize,String sortBy)
+	public PostResponse getAllPost(UserDetails userDetails,Integer pageNumber,Integer pageSize,String sortBy)
 	{
 		Pageable page = PageRequest.of(pageNumber, pageSize,Sort.by(sortBy));
 		
@@ -155,6 +169,12 @@ public class PostServiceImpl implements PostService
 	        PostDto postDto = postToPostDto(post);
 	        long totalLikes = likeRepo.countByPost(post);
 	        postDto.setTotalLikes(totalLikes);
+	        if(userDetails !=null) {
+				User currentUser = userRepo.findByEmail(userDetails.getUsername())
+						.orElseThrow(()->new UserNotFoundException("No user found"));
+				boolean liked = likeRepo.existsByUserAndPost(currentUser, post);
+				postDto.setLikedByCurrentUser(liked);
+			}
 	        return postDto;
 	    }).collect(Collectors.toList());
 		PostResponse postResponse = new PostResponse();
@@ -170,7 +190,7 @@ public class PostServiceImpl implements PostService
 
 
 	@Override
-	public PostResponse getAllPostByUserId(Long userId,Integer pageNumber,Integer pageSize,String sortBy)
+	public PostResponse getAllPostByUserId(Long userId,UserDetails userDetails, Integer pageNumber,Integer pageSize,String sortBy)
 	{
 		Pageable page = PageRequest.of(pageNumber, pageSize,Sort.by(sortBy));
 		User user = userRepo.findById(userId)
@@ -178,7 +198,18 @@ public class PostServiceImpl implements PostService
 		Page<Post> pagePosts = postRepo.findByUser(user,page);
 		if(pagePosts.isEmpty())
 			throw new ResourceNotFoundException("No post found for this user");
-		List<PostDto> postDtos = pagePosts.stream().map(this::postToPostDto).collect(Collectors.toList());
+		List<PostDto> postDtos = pagePosts.stream().map(post -> {
+	        PostDto postDto = postToPostDto(post);
+	        long totalLikes = likeRepo.countByPost(post);
+	        postDto.setTotalLikes(totalLikes);
+	        if(userDetails !=null) {
+				User currentUser = userRepo.findByEmail(userDetails.getUsername())
+						.orElseThrow(()->new UserNotFoundException("No user found"));
+				boolean liked = likeRepo.existsByUserAndPost(currentUser, post);
+				postDto.setLikedByCurrentUser(liked);
+			}
+	        return postDto;
+	    }).collect(Collectors.toList());
 		
 		PostResponse postResponse = new PostResponse();
 		postResponse.setContent(postDtos);
@@ -194,7 +225,7 @@ public class PostServiceImpl implements PostService
 
 
 	@Override
-	public PostResponse getPostsByCategory(Long categoryId,Integer pageNumber,Integer pageSize,String sortBy)
+	public PostResponse getPostsByCategory(UserDetails userDetails, Long categoryId,Integer pageNumber,Integer pageSize,String sortBy)
 	{
 		Pageable page = PageRequest.of(pageNumber, pageSize,Sort.by(sortBy));
 		
@@ -203,7 +234,18 @@ public class PostServiceImpl implements PostService
 		Page<Post> pagePosts = postRepo.findByCategory(category,page);
 		if(pagePosts.isEmpty())
 			throw new ResourceNotFoundException("No post found");
-		List<PostDto> postDtos= pagePosts.stream().map(this::postToPostDto).collect(Collectors.toList());
+		List<PostDto> postDtos= pagePosts.stream().map(post -> {
+	        PostDto postDto = postToPostDto(post);
+	        long totalLikes = likeRepo.countByPost(post);
+	        postDto.setTotalLikes(totalLikes);
+	        if(userDetails !=null) {
+				User currentUser = userRepo.findByEmail(userDetails.getUsername())
+						.orElseThrow(()->new UserNotFoundException("No user found"));
+				boolean liked = likeRepo.existsByUserAndPost(currentUser, post);
+				postDto.setLikedByCurrentUser(liked);
+			}
+	        return postDto;
+	    }).collect(Collectors.toList());
 		PostResponse postResponse = new PostResponse();
 		postResponse.setContent(postDtos);
 		postResponse.setPageNumber(pagePosts.getNumber());
@@ -276,6 +318,10 @@ public class PostServiceImpl implements PostService
         InputStreamResource resource = new InputStreamResource(inputStream);
 
 		return resource;
+	}
+	
+	private boolean hasRole(String role,UserDetails userDetails) {
+		return userDetails.getAuthorities().stream().anyMatch(e->e.getAuthority().equals(role));
 	}
 	
 }

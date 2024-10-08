@@ -8,6 +8,8 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,25 +59,27 @@ public class PostController {
     @Operation(summary = "Update a post", description = "Updates an existing post")
     public ResponseEntity<PostDto> updatePost(
             @Valid @RequestBody PostRequestDto postReqDto,
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long postId) {
-        PostDto savedPost = postService.updatePost(postReqDto, postId);
+        PostDto savedPost = postService.updatePost(postReqDto, postId,userDetails);
         return ResponseEntity.status(HttpStatus.OK).body(savedPost);
     }
 
     @GetMapping("/posts")
     @Operation(summary = "Get all posts", description = "Retrieves a list of all posts")
     public ResponseEntity<PostResponse> getAllPosts(
+    		@AuthenticationPrincipal UserDetails userDetails,
             @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER) Integer page_number,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE) Integer page_size,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY) String sort_by) {
-        PostResponse posts = postService.getAllPost(page_number, page_size, sort_by);
+        PostResponse posts = postService.getAllPost(userDetails,page_number, page_size, sort_by);
         return ResponseEntity.ok(posts);
     }
 
     @GetMapping("/posts/{postId}")
     @Operation(summary = "Get a post", description = "Retrieves a specific post by ID")
-    public ResponseEntity<PostDto> getPostById(@PathVariable Long postId) {
-        PostDto post = postService.getPostById(postId);
+    public ResponseEntity<PostDto> getPostById(@PathVariable Long postId,@AuthenticationPrincipal UserDetails userDetails) {
+        PostDto post = postService.getPostById(postId,userDetails);
         return ResponseEntity.ok(post);
     }
 
@@ -83,10 +87,11 @@ public class PostController {
     @Operation(summary = "Get all posts by user", description = "Retrieves all posts for a specific user")
     public ResponseEntity<PostResponse> getAllPostByUser(
             @PathVariable Long userId,
+            @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER) Integer page_number,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE) Integer page_size,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY) String sort_by) {
-        PostResponse posts = postService.getAllPostByUserId(userId, page_number, page_size, sort_by);
+        PostResponse posts = postService.getAllPostByUserId(userId,userDetails, page_number, page_size, sort_by);
         return ResponseEntity.ok(posts);
     }
 
@@ -94,17 +99,18 @@ public class PostController {
     @Operation(summary = "Get all posts by category", description = "Retrieves all posts for a specific category")
     public ResponseEntity<PostResponse> getAllPostByCategory(
             @PathVariable Long categoryId,
+            @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER) Integer page_number,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE) Integer page_size,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY) String sort_by) {
-        PostResponse posts = postService.getPostsByCategory(categoryId, page_number, page_size, sort_by);
+        PostResponse posts = postService.getPostsByCategory(userDetails,categoryId, page_number, page_size, sort_by);
         return ResponseEntity.ok(posts);
     }
-
     @DeleteMapping("/posts/{postId}")
     @Operation(summary = "Delete a post", description = "Deletes a specific post by ID")
-    public ResponseEntity<?> deletePost(@PathVariable Long postId) {
-        postService.deletePostById(postId);
+    public ResponseEntity<?> deletePost(@PathVariable Long postId,@AuthenticationPrincipal UserDetails userDetails) {
+        postService.deletePostById(postId,userDetails);
+        
         return ResponseEntity.noContent().build();
     }
 
@@ -119,11 +125,12 @@ public class PostController {
     @Operation(summary = "Upload an image", description = "Uploads an image for a specific post")
     public ResponseEntity<PostDto> uploadImage(
             @RequestParam("image") MultipartFile file,
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("id") Long postId) throws IOException {
-        PostDto post = postService.getPostById(postId);
+        PostDto post = postService.getPostById(postId,userDetails);
         String imageName = postService.uploadImage(path, postId, file);
         post.setImageUrl(imageName);
-        PostDto updatedPost = postService.updatePost(post, postId);
+        PostDto updatedPost = postService.updatePost(post, postId,userDetails);
         return ResponseEntity.ok(updatedPost);
     }
 
