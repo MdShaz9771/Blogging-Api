@@ -28,7 +28,7 @@ public class PostDto
 	private Map<String, String> userDetails;
 
 	@Schema(description = "Category of the post")
-	private CategoryDto categoryDto;
+	private CategoryResponseDto categoryDto;
 
 	@Schema(description = "Total number of likes for the post", example = "10")
 	private Long totalLikes;
@@ -96,12 +96,12 @@ public class PostDto
 		this.userDetails = userDetails;
 	}
 
-	public CategoryDto getCategoryDto()
+	public CategoryResponseDto getCategoryDto()
 	{
 		return categoryDto;
 	}
 
-	public void setCategoryDto(CategoryDto categoryDto)
+	public void setCategoryDto(CategoryResponseDto categoryDto)
 	{
 		this.categoryDto = categoryDto;
 	}

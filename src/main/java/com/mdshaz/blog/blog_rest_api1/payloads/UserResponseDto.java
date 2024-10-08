@@ -5,7 +5,7 @@ import java.util.Set;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Data transfer object representing a user")
-public class UserDto {
+public class UserResponseDto {
 
     @Schema(description = "Unique ID of the user", example = "1")
     private long id;
@@ -73,6 +73,6 @@ public class UserDto {
         this.roles = roles;
     }
 
-    public UserDto() {
+    public UserResponseDto() {
     }
 }

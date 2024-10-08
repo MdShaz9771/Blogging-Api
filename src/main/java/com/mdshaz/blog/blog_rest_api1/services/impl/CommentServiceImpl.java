@@ -14,7 +14,7 @@ import com.mdshaz.blog.blog_rest_api1.entity.Post;
 import com.mdshaz.blog.blog_rest_api1.entity.User;
 import com.mdshaz.blog.blog_rest_api1.exceptions.ResourceNotFoundException;
 import com.mdshaz.blog.blog_rest_api1.exceptions.UserNotFoundException;
-import com.mdshaz.blog.blog_rest_api1.payloads.CommentDto;
+import com.mdshaz.blog.blog_rest_api1.payloads.CommentResponseDto;
 import com.mdshaz.blog.blog_rest_api1.payloads.CommentRequestDto;
 import com.mdshaz.blog.blog_rest_api1.repositories.CommentRepo;
 import com.mdshaz.blog.blog_rest_api1.repositories.PostRepo;
@@ -39,9 +39,9 @@ public class CommentServiceImpl implements CommentService
 	}
 	
 	@Override
-	public CommentDto addComment(CommentRequestDto commentReqDto, Long userId, Long postId)
+	public CommentResponseDto addComment(CommentRequestDto commentReqDto, Long userId, Long postId)
 	{
-		CommentDto commentDto = modelMapper.map(commentReqDto, CommentDto.class);
+		CommentResponseDto commentDto = modelMapper.map(commentReqDto, CommentResponseDto.class);
 		User user = userRepo.findById(userId)
 				.orElseThrow(()->new UserNotFoundException("No user found"));
 		Post post = postRepo.findById(postId)
@@ -57,19 +57,19 @@ public class CommentServiceImpl implements CommentService
 	}
 
 	@Override
-	public List<CommentDto> findAllCommentByPostId(Long postId)
+	public List<CommentResponseDto> findAllCommentByPostId(Long postId)
 	{
 		Post post = postRepo.findById(postId)
 				.orElseThrow(()->new ResourceNotFoundException("No post found"));
 		Set<Comment> comments = post.getComments();
 		if(comments.isEmpty())
 			throw new ResourceNotFoundException("No comment found for post id: "+postId);
-		List<CommentDto> commentDtos = comments.stream().map(this::commentToCommentDto).toList();
+		List<CommentResponseDto> commentDtos = comments.stream().map(this::commentToCommentDto).toList();
 		return commentDtos;
 	}
 
 	@Override
-	public CommentDto findCommentById(Long commentId)
+	public CommentResponseDto findCommentById(Long commentId)
 	{
 		Comment commet = commentRepo.findById(commentId)
 				.orElseThrow(()->new ResourceNotFoundException("No comment found for this post id: "+commentId));
@@ -85,8 +85,8 @@ public class CommentServiceImpl implements CommentService
 		return totalComments;
 	}
 	
-	public CommentDto commentToCommentDto(Comment comment) {
-		CommentDto commentDto = modelMapper.map(comment, CommentDto.class);
+	public CommentResponseDto commentToCommentDto(Comment comment) {
+		CommentResponseDto commentDto = modelMapper.map(comment, CommentResponseDto.class);
 		Map<String, String> userDetails = new HashMap<String, String>();
 		userDetails.put("Id: ", comment.getUser().getId().toString());
 		userDetails.put("Name", comment.getUser().getName());
@@ -96,7 +96,7 @@ public class CommentServiceImpl implements CommentService
 		
 		return commentDto;
 	}
-	public Comment commentDtoToComment(CommentDto commentDto) {
+	public Comment commentDtoToComment(CommentResponseDto commentDto) {
 		Comment comment = modelMapper.map(commentDto, Comment.class);
 		return comment;
 	}

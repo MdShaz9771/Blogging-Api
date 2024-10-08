@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mdshaz.blog.blog_rest_api1.payloads.JwtResponseDto;
 import com.mdshaz.blog.blog_rest_api1.payloads.LoginRequestDto;
-import com.mdshaz.blog.blog_rest_api1.payloads.UserDto;
+import com.mdshaz.blog.blog_rest_api1.payloads.UserResponseDto;
 import com.mdshaz.blog.blog_rest_api1.payloads.UserRequestDto;
 import com.mdshaz.blog.blog_rest_api1.security.UserVerificationService;
 import com.mdshaz.blog.blog_rest_api1.services.UserService;
@@ -40,8 +40,8 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(summary = "Register new user", description = "Creates a new user account")
-    ResponseEntity<UserDto> register(@Valid @RequestBody UserRequestDto userReqDto) {
-        UserDto user = userService.createUser(userReqDto);
+    ResponseEntity<UserResponseDto> register(@Valid @RequestBody UserRequestDto userReqDto) {
+        UserResponseDto user = userService.createUser(userReqDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 }

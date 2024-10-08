@@ -12,7 +12,8 @@ import com.mdshaz.blog.blog_rest_api1.entity.Role;
 import com.mdshaz.blog.blog_rest_api1.entity.User;
 import com.mdshaz.blog.blog_rest_api1.exceptions.EmailAlreadyExistException;
 import com.mdshaz.blog.blog_rest_api1.exceptions.UserNotFoundException;
-import com.mdshaz.blog.blog_rest_api1.payloads.UserDto;
+import com.mdshaz.blog.blog_rest_api1.payloads.UserResponseDto;
+import com.mdshaz.blog.blog_rest_api1.payloads.UserProfile;
 import com.mdshaz.blog.blog_rest_api1.payloads.UserRequestDto;
 import com.mdshaz.blog.blog_rest_api1.repositories.RoleRepo;
 import com.mdshaz.blog.blog_rest_api1.repositories.UserRepo;
@@ -36,9 +37,9 @@ public class UserServiceImp implements UserService
 	}
 
 	@Override
-	public UserDto createUser(UserRequestDto userReqDto)
+	public UserResponseDto createUser(UserRequestDto userReqDto)
 	{
-		UserDto userDto = modelMapper.map(userReqDto, UserDto.class);
+		UserResponseDto userDto = modelMapper.map(userReqDto, UserResponseDto.class);
 		User user = dtoToUser(userDto);
 		Role role = roleRepo.findByName("ROLE_USER")
 				.orElseThrow(()->new RuntimeException("Role not found"));	
@@ -53,7 +54,7 @@ public class UserServiceImp implements UserService
 	}
 
 	@Override
-	public UserDto updateUser(UserRequestDto userReqDto, Long id)
+	public UserResponseDto updateUser(UserRequestDto userReqDto, Long id)
 	{
 		User user = userRepo.findById(id)
 				.orElseThrow(()->new UserNotFoundException("No user found"));
@@ -67,16 +68,26 @@ public class UserServiceImp implements UserService
 	}
 
 	@Override
-	public UserDto getUserById(Long id)
+	public UserResponseDto getUserById(Long id)
 	{
 		User user = userRepo.findById(id)
 				.orElseThrow(() -> new UserNotFoundException("User Not found"));
 
 		return userToDto(user);
 	}
+	
+	@Override
+	public UserProfile getUserProfile(Long id)
+	{
+		User user = userRepo.findById(id)
+				.orElseThrow(() -> new UserNotFoundException("User Not found"));
+
+		return modelMapper.map(user, UserProfile.class);
+	}
+
 
 	@Override
-	public UserDto getUserByEmail(String email)
+	public UserResponseDto getUserByEmail(String email)
 	{
 		User user = userRepo.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User Not found"));
 
@@ -84,11 +95,11 @@ public class UserServiceImp implements UserService
 	}
 
 	@Override
-	public List<UserDto> getAllUser()
+	public List<UserResponseDto> getAllUser()
 	{
 		List<User> users = userRepo.findAll();
 //		List<UserDto> usersDto= users.stream().map(this::userToDto).toList();
-		List<UserDto> userDtos= users.stream()
+		List<UserResponseDto> userDtos= users.stream()
 				.map(user->userToDto(user))
 				.collect(Collectors.toList());
 		return userDtos;
@@ -103,20 +114,15 @@ public class UserServiceImp implements UserService
 
 	}
 
-	public User dtoToUser(UserDto userDto)
+	public User dtoToUser(UserResponseDto userDto)
 	{
 		User user = modelMapper.map(userDto, User.class);
-//		user.setId(userDto.getId());
-//		user.setName(userDto.getName());
-//		user.setEmail(userDto.getEmail());
-//		user.setPassword(userDto.getPassword());
-//		user.setAbout(userDto.getAbout());
 		return user;
 	}
 
-	public UserDto userToDto(User user)
+	public UserResponseDto userToDto(User user)
 	{
-		UserDto userDto = modelMapper.map(user, UserDto.class);
+		UserResponseDto userDto = modelMapper.map(user, UserResponseDto.class);
 		
 		if(user.getRole() !=null) {
 			Set<String> roles = user.getRole()
@@ -129,4 +135,5 @@ public class UserServiceImp implements UserService
 		return userDto;
 	}
 
+	
 }

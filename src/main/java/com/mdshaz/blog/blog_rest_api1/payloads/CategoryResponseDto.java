@@ -1,21 +1,16 @@
 package com.mdshaz.blog.blog_rest_api1.payloads;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 @Schema(description = "Data transfer object representing a blog category")
-public class CategoryDto {
+public class CategoryResponseDto {
 
     @Schema(description = "Unique ID of the category", example = "1")
     private long id;
 
-    @NotBlank(message = "Category name should not be Blank")
-    @Size(min = 4, max = 30, message = "Category name must be between 4 to 30 characters")
     @Schema(description = "Name of the category", example = "Technology")
     private String name;
 
-    @Size(min = 4, max = 120, message = "Description must be between 4 and 120 characters")
     @Schema(description = "Short description of the category", example = "This category covers technology-related posts.")
     private String description;
 
@@ -43,6 +38,6 @@ public class CategoryDto {
         this.description = description;
     }
 
-    public CategoryDto() {
+    public CategoryResponseDto() {
     }
 }

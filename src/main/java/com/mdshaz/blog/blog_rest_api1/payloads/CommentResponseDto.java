@@ -6,7 +6,7 @@ import java.util.Map;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Data transfer object representing a comment on a blog post")
-public class CommentDto {
+public class CommentResponseDto {
 
     @Schema(description = "Unique ID of the comment", example = "101")
     private Long id;
@@ -63,6 +63,6 @@ public class CommentDto {
         this.userDetails = userDetails;
     }
 
-    public CommentDto() {
+    public CommentResponseDto() {
     }
 }

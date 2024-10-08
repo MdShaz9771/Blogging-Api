@@ -27,7 +27,7 @@ import com.mdshaz.blog.blog_rest_api1.entity.Post;
 import com.mdshaz.blog.blog_rest_api1.entity.User;
 import com.mdshaz.blog.blog_rest_api1.exceptions.ResourceNotFoundException;
 import com.mdshaz.blog.blog_rest_api1.exceptions.UserNotFoundException;
-import com.mdshaz.blog.blog_rest_api1.payloads.CategoryDto;
+import com.mdshaz.blog.blog_rest_api1.payloads.CategoryResponseDto;
 import com.mdshaz.blog.blog_rest_api1.payloads.PostDto;
 import com.mdshaz.blog.blog_rest_api1.payloads.PostRequestDto;
 import com.mdshaz.blog.blog_rest_api1.payloads.PostResponse;
@@ -79,6 +79,7 @@ public class PostServiceImpl implements PostService
 		post.setCategory(category);
 		post.setUser(user);
 		post.setCreatedAt(LocalDateTime.now());
+		post.setImageUrl("default.png");
 		Post savedPost = postRepo.save(post);
 		PostDto savedPostDto = postToPostDto(savedPost);
 		savedPostDto.setLikedByCurrentUser(false);
@@ -221,7 +222,7 @@ public class PostServiceImpl implements PostService
 		userDetails.put("Name", post.getUser().getName());
 		userDetails.put("Email", post.getUser().getEmail());
 		PostDto postDto = modelMapper.map(post, PostDto.class);
-		postDto.setCategoryDto(modelMapper.map(post.getCategory(),CategoryDto.class ));
+		postDto.setCategoryDto(modelMapper.map(post.getCategory(),CategoryResponseDto.class ));
 		postDto.setUserDetails(userDetails);
 		return postDto;
 		

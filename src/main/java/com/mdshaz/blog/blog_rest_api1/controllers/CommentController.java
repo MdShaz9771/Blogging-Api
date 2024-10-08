@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mdshaz.blog.blog_rest_api1.payloads.CommentDto;
+import com.mdshaz.blog.blog_rest_api1.payloads.CommentResponseDto;
 import com.mdshaz.blog.blog_rest_api1.payloads.CommentRequestDto;
 import com.mdshaz.blog.blog_rest_api1.services.CommentService;
 
@@ -31,22 +31,22 @@ public class CommentController {
 
     @PostMapping("{userId}/posts/{postId}/comments")
     @Operation(summary = "Add a comment", description = "Adds a new comment to a post")
-    ResponseEntity<CommentDto> addComment(@RequestBody CommentRequestDto commentdto, @PathVariable Long userId, @PathVariable Long postId) {
-        CommentDto savedComment = commentService.addComment(commentdto, userId, postId);
+    ResponseEntity<CommentResponseDto> addComment(@RequestBody CommentRequestDto commentdto, @PathVariable Long userId, @PathVariable Long postId) {
+        CommentResponseDto savedComment = commentService.addComment(commentdto, userId, postId);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedComment);
     }
 
     @GetMapping("/posts/{postId}/comments")
     @Operation(summary = "Get all comments of a post", description = "Retrieves all comments for a specific post")
-    ResponseEntity<List<CommentDto>> getAllCommentsOfPost(@PathVariable Long postId) {
-        List<CommentDto> comments = commentService.findAllCommentByPostId(postId);
+    ResponseEntity<List<CommentResponseDto>> getAllCommentsOfPost(@PathVariable Long postId) {
+        List<CommentResponseDto> comments = commentService.findAllCommentByPostId(postId);
         return ResponseEntity.ok(comments);
     }
 
     @GetMapping("/posts/comments/{commentId}")
     @Operation(summary = "Get a comment by ID", description = "Retrieves a specific comment by ID")
-    ResponseEntity<CommentDto> getAllCommentById(@PathVariable Long commentId) {
-        CommentDto comment = commentService.findCommentById(commentId);
+    ResponseEntity<CommentResponseDto> getAllCommentById(@PathVariable Long commentId) {
+        CommentResponseDto comment = commentService.findCommentById(commentId);
         return ResponseEntity.ok(comment);
     }
 
