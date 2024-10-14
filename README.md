@@ -48,8 +48,9 @@
    Set up MySQL database
 
 Make sure your MySQL server is running, and create a new database:
-
+```bash
 CREATE DATABASE blogging_db;
+```
 Configure database properties
 
 Update the database configuration in the src/main/resources/application.properties file with your MySQL credentials:
